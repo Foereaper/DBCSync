@@ -14,7 +14,7 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	// First run → generate config template and exit
+	// First run - generate config template and exit
 	if created {
 		fmt.Printf("Config template created at %s. Please edit it and re-run.\n", configPath)
 		return
