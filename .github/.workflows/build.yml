@@ -1,0 +1,55 @@
+name: Build DBCsync
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'build'))
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20
+
+      - name: Install dependencies
+        run: |
+          cd src
+          go mod tidy
+        
+      - name: Make build dir
+        run: |
+          mkdir -p bin
+        
+      - name: Build Linux binary
+        run: |
+          cd src
+          GOOS=linux GOARCH=amd64 go build -o ../bin/dbcsync
+
+      - name: Build Windows binary
+        run: |
+          cd src
+          GOOS=windows GOARCH=amd64 go build -o ../bin/dbcsync.exe
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: dbcsync
+          path: |
+            bin/dbcsync
+            bin/dbcsync.exe
