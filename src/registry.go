@@ -1,3 +1,8 @@
+// Copyright (c) 2025 DBCsync
+//
+// DBCsync is licensed under the MIT License.
+// See the LICENSE file for details.
+
 package main
 
 // SyncFunc represents a sync function with a name and handler

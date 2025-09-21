@@ -146,3 +146,7 @@ var syncRegistry = []SyncFunc{
 - The DBC database **must exist** and be populated by Stoneharry's tool before running this sync.  
 - The tool uses `REPLACE INTO` to safely update existing DBC entries.  
 - Tested with **TrinityCore 3.3.5 world database**; other versions may require mapping adjustments.  
+
+---
+
+© 2025 DBCsync is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
