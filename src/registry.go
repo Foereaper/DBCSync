@@ -8,11 +8,11 @@ type SyncFunc struct {
 
 // syncRegistry holds all sync functions
 var syncRegistry = []SyncFunc{
-	{
-		Name: "item_template → item",
-		Func: func(conns *DBConnections, cfg *Config) error {
-			return syncItemTemplate(conns, &cfg.SyncJobs["item"])
-		},
-	},
-	// Add more syncs here
+    {
+        Name: "item_template → item",
+        Func: func(conns *DBConnections, cfg *Config) error {
+            jobCfg := cfg.SyncJobs["item"]
+            return syncItemTemplate(conns, jobCfg)
+        },
+    },
 }

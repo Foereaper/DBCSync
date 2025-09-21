@@ -30,9 +30,12 @@ func loadOrInitConfig(path string) (*Config, bool, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		// Create template config
 		template := Config{
-			World: DBConfig{"root", "password", "127.0.0.1", "3306", "world"},
-			DBC:   DBConfig{"root", "password", "127.0.0.1", "3306", "dbc"},
-		}
+            World: DBConfig{"root", "password", "127.0.0.1", "3306", "world"},
+            DBC:   DBConfig{"root", "password", "127.0.0.1", "3306", "dbc"},
+            SyncJobs: map[string]SyncJobConfig{
+                "item": {MinEntry: 1000},
+            },
+        }
 
 		data, err := json.MarshalIndent(template, "", "  ")
 		if err != nil {

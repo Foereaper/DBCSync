@@ -1,4 +1,10 @@
-func syncItemTemplate(conns *DBConnections, cfg *SyncJobConfig) error {
+package main
+
+import (
+	"fmt"
+)
+
+func syncItemTemplate(conns *DBConnections, cfg SyncJobConfig) error {
 	minEntry := cfg.MinEntry
 
 	query := `
@@ -12,7 +18,7 @@ func syncItemTemplate(conns *DBConnections, cfg *SyncJobConfig) error {
             InventoryType AS InventorySlotID,
             sheath AS SheathID
         FROM item_template
-        WHERE entry > ?
+        WHERE entry >= ?
     `
 
 	rows, err := conns.World.Query(query, minEntry)
@@ -36,7 +42,8 @@ func syncItemTemplate(conns *DBConnections, cfg *SyncJobConfig) error {
 		return fmt.Errorf("prepare REPLACE: %w", err)
 	}
 	defer stmt.Close()
-
+    
+    synced := 0
 	for rows.Next() {
 		var itemID, itemClass, itemSubClass, soundOverrideSubClassID, materialID, itemDisplayInfo, inventorySlotID, sheathID int
 
@@ -67,6 +74,7 @@ func syncItemTemplate(conns *DBConnections, cfg *SyncJobConfig) error {
 			tx.Rollback()
 			return fmt.Errorf("replace row: %w", err)
 		}
+        synced++
 	}
 
 	if err := rows.Err(); err != nil {
@@ -78,6 +86,6 @@ func syncItemTemplate(conns *DBConnections, cfg *SyncJobConfig) error {
 		return fmt.Errorf("commit: %w", err)
 	}
 
-	fmt.Println("Synced item_template → item (with job-specific minEntry)")
+	fmt.Printf("Synced item_template → item, %d items\n", synced)
 	return nil
 }
