@@ -32,8 +32,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd src
-          go mod tidy
+          go mod tidy -C src
         
       - name: Make build dir
         run: |
@@ -41,13 +40,11 @@ jobs:
         
       - name: Build Linux binary
         run: |
-          cd src
-          GOOS=linux GOARCH=amd64 go build -o ../bin/dbcsync
+          GOOS=linux GOARCH=amd64 go build -C src -o ../bin/dbcsync
 
       - name: Build Windows binary
         run: |
-          cd src
-          GOOS=windows GOARCH=amd64 go build -o ../bin/dbcsync.exe
+          GOOS=windows GOARCH=amd64 go build -C src -o ../bin/dbcsync.exe
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
