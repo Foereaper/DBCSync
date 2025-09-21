@@ -36,23 +36,38 @@ jobs:
         run: |
           mkdir -p bin
 
+      # Linux
       - name: Build Linux binary
         run: |
           GOOS=linux GOARCH=amd64 go build -C src -o ../bin/dbcsync-linux
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dbcsync-linux
+          path: bin/dbcsync-linux
 
-      - name: Build MacOS binary
+      # MacOS Intel
+      - name: Build MacOS Intel binary
         run: |
-          GOOS=darwin GOARCH=amd64 go build -C src -o ../bin/dbcsync-macos
+          GOOS=darwin GOARCH=amd64 go build -C src -o ../bin/dbcsync-macos-intel
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dbcsync-macos-intel
+          path: bin/dbcsync-macos-intel
 
+      # MacOS ARM64
+      - name: Build MacOS ARM64 binary
+        run: |
+          GOOS=darwin GOARCH=arm64 go build -C src -o ../bin/dbcsync-macos-arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dbcsync-macos-arm64
+          path: bin/dbcsync-macos-arm64
+
+      # Windows
       - name: Build Windows binary
         run: |
           GOOS=windows GOARCH=amd64 go build -C src -o ../bin/dbcsync.exe
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: dbcsync
-          path: |
-            bin/dbcsync-linux
-            bin/dbcsync-macos
-            bin/dbcsync.exe
+          name: dbcsync-windows
+          path: bin/dbcsync.exe
