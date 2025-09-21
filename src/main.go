@@ -6,22 +6,29 @@
 package main
 
 import (
+    "flag"
 	"fmt"
 	"log"
 )
 
 func main() {
-	const configPath = "./config.json"
+	// Define CLI flag
+	configPath := flag.String("config", "./config.json", "Path to config file")
+	// Optional shorthand: -c
+	flag.StringVar(configPath, "c", "./config.json", "Path to config file (shorthand)")
+
+	// Parse flags
+	flag.Parse()
 
 	// Load or init config
-	cfg, created, err := loadOrInitConfig(configPath)
+	cfg, created, err := loadOrInitConfig(*configPath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
 	// First run - generate config template and exit
 	if created {
-		fmt.Printf("Config template created at %s. Please edit it and re-run.\n", configPath)
+		fmt.Printf("Config template created at %s. Please edit it and re-run.\n", *configPath)
 		return
 	}
 
