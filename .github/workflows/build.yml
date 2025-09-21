@@ -38,7 +38,11 @@ jobs:
 
       - name: Build Linux binary
         run: |
-          GOOS=linux GOARCH=amd64 go build -C src -o ../bin/dbcsync
+          GOOS=linux GOARCH=amd64 go build -C src -o ../bin/dbcsync-linux
+
+      - name: Build MacOS binary
+        run: |
+          GOOS=darwin GOARCH=amd64 go build -C src -o ../bin/dbcsync-macos
 
       - name: Build Windows binary
         run: |
@@ -49,5 +53,6 @@ jobs:
         with:
           name: dbcsync
           path: |
-            bin/dbcsync
+            bin/dbcsync-linux
+            bin/dbcsync-macos
             bin/dbcsync.exe
