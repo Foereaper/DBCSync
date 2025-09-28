@@ -19,7 +19,7 @@ dbcsync is a Go-based utility for synchronizing tables from a TrinityCore **worl
 
 - Go 1.20 or higher  
 - MySQL database for both **world** and **DBC**  
-- DBC database populated via [Stoneharry's Spell Editor DBC Import Tool](https://github.com/stoneharry/WoW-Spell-Editor)  
+- DBC database populated via [DBCTool](https://github.com/Foereaper/DBCTool)  
 - Network access to both MySQL servers  
 
 ---
@@ -143,7 +143,7 @@ var syncRegistry = []SyncFunc{
 
 ## Notes
 
-- The DBC database **must exist** and be populated by Stoneharry's tool before running this sync.  
+- The DBC database **must exist** and be populated by [DBCTool](https://github.com/Foereaper/DBCTool) before running this sync.  
 - The tool uses `REPLACE INTO` to safely update existing DBC entries.  
 - Tested with **TrinityCore 3.3.5 world database**; other versions may require mapping adjustments.  
 

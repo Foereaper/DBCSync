@@ -14,14 +14,14 @@ func syncItemTemplate(conns *DBConnections, cfg SyncJobConfig) error {
 
 	query := `
         SELECT 
-            entry AS itemID,
-            class AS ItemClass,
-            subclass AS ItemSubClass,
-            SoundOverrideSubclass AS sound_override_subclassid,
-            Material AS MaterialID,
-            displayid AS ItemDisplayInfo,
-            InventoryType AS InventorySlotID,
-            sheath AS SheathID
+            entry AS id,
+            class AS class,
+            subclass AS subclass,
+            SoundOverrideSubclass AS sound_override_subclass,
+            Material AS material,
+            displayid AS display_id,
+            InventoryType AS inventory_type,
+            sheath AS sheath
         FROM item_template
         WHERE entry >= ?
     `
@@ -38,8 +38,8 @@ func syncItemTemplate(conns *DBConnections, cfg SyncJobConfig) error {
 	}
 
 	stmt, err := tx.Prepare(`
-        REPLACE INTO item 
-            (itemID, ItemClass, ItemSubClass, sound_override_subclassid, MaterialID, ItemDisplayInfo, InventorySlotID, SheathID)
+        REPLACE INTO Item 
+            (id, class, subclass, sound_override_subclass, material, display_id, inventory_type, sheath)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `)
 	if err != nil {
@@ -50,31 +50,31 @@ func syncItemTemplate(conns *DBConnections, cfg SyncJobConfig) error {
     
     synced := 0
 	for rows.Next() {
-		var itemID, itemClass, itemSubClass, soundOverrideSubClassID, materialID, itemDisplayInfo, inventorySlotID, sheathID int
+		var id, class, subclass, sound_override_subclass, material, display_id, inventory_type, sheath int
 
 		if err := rows.Scan(
-			&itemID,
-			&itemClass,
-			&itemSubClass,
-			&soundOverrideSubClassID,
-			&materialID,
-			&itemDisplayInfo,
-			&inventorySlotID,
-			&sheathID,
+			&id,
+			&class,
+			&subclass,
+			&sound_override_subclass,
+			&material,
+			&display_id,
+			&inventory_type,
+			&sheath,
 		); err != nil {
 			tx.Rollback()
 			return fmt.Errorf("scan row: %w", err)
 		}
 
 		if _, err := stmt.Exec(
-			itemID,
-			itemClass,
-			itemSubClass,
-			soundOverrideSubClassID,
-			materialID,
-			itemDisplayInfo,
-			inventorySlotID,
-			sheathID,
+			id,
+			class,
+			subclass,
+			sound_override_subclass,
+			material,
+			display_id,
+			inventory_type,
+			sheath,
 		); err != nil {
 			tx.Rollback()
 			return fmt.Errorf("replace row: %w", err)
